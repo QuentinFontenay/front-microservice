@@ -11,11 +11,13 @@
 export default {
   name: 'home',
   methods: {
-    clickInscription () {
-      this.$router.push({ name: 'Inscription' })
+    clickInscription (event) {
+      event.preventDefault()
+      this.$router.push('/inscription')
     },
-    clickAccueil () {
-      this.$router.push({ name: 'Accueil' })
+    clickAccueil (event) {
+      event.preventDefault()
+      this.$router.push('/accueil')
     }
   }
 }
