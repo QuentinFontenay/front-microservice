@@ -38,13 +38,13 @@
                 }
                 else {
                     try{
+                        var jsonContent = JSON.stringify({"login": this.identif, "password": this.mdp, "prenom": this.prenom, "nom": this.nom, "email" :this.email});
+                        console.log(jsonContent);
                         const Http = new XMLHttpRequest();
                         Http.open("POST", apiUrl);
-                        Http.send();
-                        Http.onreadystatechange = () => {
-                            console.log(Http.responseText)
-                        }
-                        this.$router.push('/')
+                        Http.setRequestHeader("Content-Type", "application/json");
+                        Http.send(jsonContent);
+                        //this.$router.push('/')
                     }
                     catch {
                         console.log("erreur lors de la requete API")
