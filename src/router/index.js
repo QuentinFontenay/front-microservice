@@ -5,6 +5,7 @@ import Accueil from "../views/Accueil.vue";
 import Inscription from "../views/Inscription";
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import GestionCompte from "../views/GestionCompte";
 
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
@@ -19,6 +20,11 @@ const routes = [
     path: '/inscription',
     name: 'inscription',
     component: Inscription
+  },
+  {
+    path: '/account_gestion',
+    name: 'GestionCompte',
+    component: GestionCompte
   },
   {
     path: '/accueil',
