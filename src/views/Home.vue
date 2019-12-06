@@ -42,6 +42,7 @@
 
 <script>
     // @ is an alias to /src
+    var apiUrl='http://localhost:3000/users/connexion';
 
     export default {
         data() {
@@ -64,14 +65,36 @@
             };
         },
         methods: {
-            validate() {
+            clickInscription(){
+                this.$router.push('/inscription')
+            },
+
+            validate(event) {
+                var con = false;
+
+                event.preventDefault()
                 if (this.$refs.form.validate()) {
                     this.snackbar = true
                     //var context = this
                     console.log(this.form.firstName)
                     console.log(this.form.Password)
-
                 }
+
+                apiUrl = apiUrl + '/' + this.form.firstName + '/' + this.form.Password;
+                console.log(apiUrl);
+                var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
+                console.log(jsonContent);
+                const Http = new XMLHttpRequest();
+                Http.open("GET", apiUrl);
+                Http.setRequestHeader("Content-Type", "application/json");
+                Http.responseType = 'json';
+                Http.send(jsonContent);
+
+                if (con == true){
+                    this.$router.push('/accueil')
+                }
+
+
             }
 
         }

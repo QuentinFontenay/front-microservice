@@ -44,7 +44,7 @@
                         Http.open("POST", apiUrl);
                         Http.setRequestHeader("Content-Type", "application/json");
                         Http.send(jsonContent);
-                        //this.$router.push('/')
+                        this.$router.push('/')
                     }
                     catch {
                         console.log("erreur lors de la requete API")
