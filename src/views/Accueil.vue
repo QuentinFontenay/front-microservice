@@ -6,7 +6,8 @@
             <v-spacer></v-spacer>
 
             <v-toolbar-items>
-                <v-btn @click="clickAccount" text>Gestion de Compte</v-btn>
+                <v-btn text>Mes Informations</v-btn>
+                <v-btn  @click="clickHistorique" text>Mes Commandes</v-btn>
             </v-toolbar-items>
 
             <template v-if="$vuetify.breakpoint.smAndUp">
@@ -17,7 +18,7 @@
         </v-toolbar>
         <v-container class="my-5">
             <v-layout row wrap>
-                <v-flex xs12 sm6 md4 lg3 v-for="equip in equipement" v-bind:key="equip">
+                <v-flex xs12 sm6 md4 lg3 v-for="equip in equipement" v-bind:key="equip._id">
                     <v-card hover class="mx-auto ma-6" max-width="300">
                         <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"></v-img>
 
@@ -64,10 +65,9 @@
         methods: {
             clickCommande (id) {
                 console.log(id)
-                this.$router.push({ name: 'commande', params: { idProduit: id } })
+                this.$router.push({ name: 'commande', params: { idProduit: id, idUser: 1 } })
             },
-            clickAccount (event) {
-                event.preventDefault()
+            clickHistorique () {
                 this.$router.push({ name: 'GestionCompte'})
             }
         },

@@ -1,68 +1,85 @@
 <template>
-    <v-card
-            class="mx-auto"
-            height="1000"
-            tile
-    >
-        <v-navigation-drawer permanent>
-            <v-system-bar></v-system-bar>
-            <v-list>
-                <v-list-item>
-                    <v-list-item-avatar>
-                        <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-                    </v-list-item-avatar>
-                </v-list-item>
+    <div>
+        <v-toolbar dark>
+            <v-toolbar-title>
+                <router-link to="/accueil" class="toolbar-title">LOCASPORT</router-link>
+            </v-toolbar-title>
 
-                <v-list-item link>
-                    <v-list-item-content>
-                        <v-list-item-title class="title">John Leider</v-list-item-title>
-                        <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
-                    </v-list-item-content>
+            <v-spacer></v-spacer>
 
-                    <v-list-item-action>
-                        <v-icon>mdi-menu-down</v-icon>
-                    </v-list-item-action>
-                </v-list-item>
-            </v-list>
-            <v-divider></v-divider>
-            <v-list
-                    nav
-                    dense
-            >
-                <v-list-item-group v-model="item" color="primary">
-                    <v-list-item
-                            v-for="(item, i) in items"
-                            :key="i"
-                    >
-                        <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
-                        </v-list-item-icon>
+            <v-toolbar-items>
+                <v-btn text>Mes Informations</v-btn>
+                <v-btn text>Mes Commandes</v-btn>
+            </v-toolbar-items>
 
-                        <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
-        </v-navigation-drawer>
-    </v-card>
+            <template v-if="$vuetify.breakpoint.smAndUp">
+                <v-btn icon>
+                    <v-icon>mdi-logout</v-icon>
+                </v-btn>
+            </template>
+        </v-toolbar>
+        <v-content>
+            <v-container>
+                <v-simple-table>
+                    <template v-slot:default>
+                        <thead>
+                        <tr>
+                            <th class="text-left">Date de commande</th>
+                            <th class="text-left">Nom de l'equipement</th>
+                            <th class="text-left">Sport</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in equipement" :key="item._id">
+                            <td>{{ item.dateCommande}}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.sport }}</td>
+                        </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+            </v-container>
+        </v-content>
+    </div>
 </template>
 
 <script>
+
     export default {
         name: "GestionCompte",
         data: () => ({
             item: 0,
-            items: [
-                { text: 'Mes Commandes', icon: 'mdi-history' },
-                { text: 'Mes Informations', icon: 'mdi-account-multiple' },
-                { text: 'Starred', icon: 'mdi-star' },
-                { text: 'Recent', icon: 'mdi-folder' },
-            ],
+            commande: [],
+            equipement: [],
+            displayEquip: [],
+            url: ""
         }),
+        mounted() {
+            this.axios.get('http://localhost:8080/commande/'
+            )
+                .then((response) => {
+                    this.commande = response.data
+                    for (let i = 0; i < this.commande.length; i++) {
+                        this.axios.get('http://localhost:8080/equipement/'+ this.commande[i].idEquipement)
+                            .then((response) => {
+                                Object.assign(response.data, {
+                                    dateCommande: this.commande[i].dateCommande
+                                });
+                                this.equipement.push(response.data)
+                            }, (error) => {
+                                console.log(error);
+                            });
+                    }
+                }, (error) => {
+                    console.log(error);
+                });
+        },
     }
 </script>
 
 <style scoped>
-
+    .toolbar-title {
+        color: white;
+        text-decoration: none;
+    }
 </style>
