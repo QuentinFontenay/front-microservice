@@ -15,7 +15,7 @@
 
             <v-stepper-items>
                 <v-stepper-content step="1">
-                    <v-form v-model="valid" lazy-validation>
+                    <v-form v-model="valid" lazy-validation ref="form">
                         <v-text-field
                                 v-model="name"
                                 label="Nom"
@@ -43,7 +43,7 @@
                         ></v-text-field>
                     </v-form>
 
-                    <v-btn :disabled="!valid" color="primary" style="margin-top: 1%" @click="e1 = 2">
+                    <v-btn :disabled="!valid" color="primary" style="margin-top: 1%" @click="clickForm">
                         Continue
                     </v-btn>
 
@@ -243,6 +243,11 @@
             this.recupClient()
         },
         methods: {
+            clickForm() {
+                if (this.$refs.form.validate()) {
+                    this.e1 = 2
+                }
+            },
             postClient: function () {
                 var today = new Date()
                 var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
