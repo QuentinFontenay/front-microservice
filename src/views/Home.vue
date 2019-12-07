@@ -81,14 +81,13 @@
                 }
 
                 apiUrl = apiUrl + '/' + this.form.firstName + '/' + this.form.Password;
-                console.log(apiUrl);
                 var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
-                console.log(jsonContent);
                 const Http = new XMLHttpRequest();
                 Http.open("GET", apiUrl);
                 Http.setRequestHeader("Content-Type", "application/json");
                 Http.responseType = 'json';
                 Http.send(jsonContent);
+                Http.json(jsonContent)
 
                 if (con == true){
                     this.$router.push('/accueil')
