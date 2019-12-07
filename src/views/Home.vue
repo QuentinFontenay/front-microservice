@@ -72,6 +72,7 @@
             validate(event) {
                 var con = false;
 
+
                 event.preventDefault()
                 if (this.$refs.form.validate()) {
                     this.snackbar = true
@@ -81,14 +82,22 @@
                 }
 
                 apiUrl = apiUrl + '/' + this.form.firstName + '/' + this.form.Password;
-                var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
-                const Http = new XMLHttpRequest();
+                //var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
+                /*const Http = new XMLHttpRequest();
+                console.log(apiUrl);
                 Http.open("GET", apiUrl);
                 Http.setRequestHeader("Content-Type", "application/json");
-                Http.responseType = 'json';
-                Http.send(jsonContent);
-                Http.json(jsonContent)
-
+                //Http.responseType = 'json';
+                Http.send(null);
+                console.log(Http.status);
+                console.log(Http.response);
+                if(Http.readyState==0){
+                    console.log('fuck')
+                }
+                if(Http.readyState==4){
+                    console.log("Requête terminé");
+                }*/
+                this.axios.get(apiUrl).then(response =>(console.log(response.data)));
                 if (con == true){
                     this.$router.push('/accueil')
                 }

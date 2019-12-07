@@ -3,8 +3,13 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Accueil from "../views/Accueil.vue";
 import Inscription from "../views/Inscription";
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+//import Login from "../views/Login";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+Vue.use(VueAxios, axios);
+Vue.use(VueRouter);
 
 const routes = [
   {
