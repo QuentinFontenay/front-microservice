@@ -3,13 +3,13 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Accueil from "../views/Accueil.vue";
 import Inscription from "../views/Inscription";
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-//import Login from "../views/Login";
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import GestionCompte from "../views/GestionCompte";
+import Commande from "../views/Commande";
 
-Vue.use(VueRouter);
-Vue.use(VueAxios, axios);
-Vue.use(VueRouter);
+Vue.use(VueAxios, axios)
+Vue.use(VueRouter)
 
 const routes = [
   {
@@ -23,9 +23,20 @@ const routes = [
     component: Inscription
   },
   {
+    path: '/account_gestion',
+    name: 'GestionCompte',
+    component: GestionCompte
+  },
+  {
     path: '/accueil',
     name: 'accueil',
     component: Accueil
+  },
+  {
+    path: '/commande/:idProduit/:idUser',
+    props: true,
+    name: 'commande',
+    component: Commande
   }
 ]
 
