@@ -15,7 +15,7 @@
 </div>
 </template>
 <script>
-    var apiUrl='http://localhost:3000/users';
+    const API_USER = 'http://localhost:3000/users';
 
     export default {
         name: "Inscription",
@@ -33,17 +33,18 @@
             validInscription(event) {
                 event.preventDefault()
                 var confirm_password = document.getElementById("mdp_check");
-                if (this.mdp!= this.mdp_check){
+                if (this.mdp !== this.mdp_check){
                     confirm_password.setCustomValidity("Les mots de passe doivent correspondre");
                 }
                 else {
                     try{
-                        var jsonContent = JSON.stringify({"login": this.identif, "password": this.mdp, "prenom": this.prenom, "nom": this.nom, "email" :this.email});
-                        console.log(jsonContent);
-                        const Http = new XMLHttpRequest();
-                        Http.open("POST", apiUrl);
-                        Http.setRequestHeader("Content-Type", "application/json");
-                        Http.send(jsonContent);
+                        this.axios.post(API_USER, {
+                            login: this.identif,
+                            password: this.mdp,
+                            nom: this.nom,
+                            prenom: this.prenom,
+                            email: this.email,
+                        });
                         this.$router.push('/')
                     }
                     catch {

@@ -44,7 +44,8 @@
 </template>
 
 <script>
-
+    const API_COMMANDE = "http://localhost:8080/commande/?idClient=";
+    const API_EQUIPEMENT = "http://localhost:8080/equipement/";
     export default {
         name: "GestionCompte",
         data: () => ({
@@ -55,12 +56,13 @@
             url: ""
         }),
         mounted() {
-            this.axios.get('http://localhost:8080/commande/'
+            console.log(API_COMMANDE + this.$route.params.idClient);
+            this.axios.get(API_COMMANDE + this.$route.params.idClient
             )
                 .then((response) => {
                     this.commande = response.data
                     for (let i = 0; i < this.commande.length; i++) {
-                        this.axios.get('http://localhost:8080/equipement/'+ this.commande[i].idEquipement)
+                        this.axios.get(API_EQUIPEMENT + this.commande[i].idEquipement)
                             .then((response) => {
                                 Object.assign(response.data, {
                                     dateCommande: this.commande[i].dateCommande

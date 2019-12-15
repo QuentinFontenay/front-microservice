@@ -236,11 +236,12 @@
                     'Item 4',
                 ],
                 checkbox: false,
+                idUser: '',
             }
         },
         created: function () {
-            this.recupEquipement()
-            this.recupClient()
+            this.recupEquipement();
+            this.recupClient();
         },
         methods: {
             clickForm() {
@@ -286,6 +287,7 @@
                     .then(response => (this.records = response.data))
             },
             recupClient() {
+                console.log(this.$route.params.idUser);
                 this.axios.get(API_CLIENT2 + this.$route.params.idUser
                 )
                     .then(

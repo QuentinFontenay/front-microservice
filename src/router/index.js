@@ -5,7 +5,7 @@ import Accueil from "../views/Accueil.vue";
 import Inscription from "../views/Inscription";
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import GestionCompte from "../views/GestionCompte";
+import HistoriqueCommande from "../views/HistoriqueCommande";
 import Commande from "../views/Commande";
 
 Vue.use(VueAxios, axios)
@@ -23,9 +23,9 @@ const routes = [
     component: Inscription
   },
   {
-    path: '/account_gestion',
-    name: 'GestionCompte',
-    component: GestionCompte
+    path: '/historique_commande',
+    name: 'HistoriqueCommande',
+    component: HistoriqueCommande
   },
   {
     path: '/accueil',

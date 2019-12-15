@@ -33,7 +33,6 @@
               <br>
                 <div class="home">
                     <v-btn color="success" class="mr-4" @click="clickInscription">Inscription</v-btn>
-                    <v-btn color="success" class="mr-4" @click="clickAccueil">Accueil</v-btn>
                 </div>
             </v-col>
         </v-row>
@@ -42,11 +41,12 @@
 
 <script>
     // @ is an alias to /src
-    var apiUrl='http://localhost:3000/users/connexion';
+    var apiUrl='http://localhost:3000/users';
 
     export default {
         data() {
             return {
+                t: 0,
                 firstName: '',
                 firstNameRules: [
                     v => !!v || 'Login is required',
@@ -56,9 +56,9 @@
                 PasswordRules: [
                     v => !!v || 'Password is required'
                 ],
-
+                user: [],
                 show: true,
-                valid: true,
+                valid: false,
                 form: {
                     cookie: false,
                 }
@@ -70,41 +70,26 @@
             },
 
             validate(event) {
-                var con = false;
+                event.preventDefault();
 
-
-                event.preventDefault()
                 if (this.$refs.form.validate()) {
-                    this.snackbar = true
-                    //var context = this
-                    console.log(this.form.firstName)
-                    console.log(this.form.Password)
+                 //   var context = this;
+                    console.log("esst");
                 }
 
-                apiUrl = apiUrl + '/' + this.form.firstName + '/' + this.form.Password;
-                //var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
-                /*const Http = new XMLHttpRequest();
-                console.log(apiUrl);
-                Http.open("GET", apiUrl);
-                Http.setRequestHeader("Content-Type", "application/json");
-                //Http.responseType = 'json';
-                Http.send(null);
-                console.log(Http.status);
-                console.log(Http.response);
-                if(Http.readyState==0){
-                    console.log('fuck')
-                }
-                if(Http.readyState==4){
-                    console.log("Requête terminé");
-                }*/
-                this.axios.get(apiUrl).then(response =>(console.log(response.data)));
-                if (con == true){
-                    this.$router.push('/accueil')
-                }
-
-
+                apiUrl = apiUrl + '?login=' + this.form.firstName + '&password=' + this.form.Password;
+                this.axios.get(apiUrl
+                )
+                    .then(response => {
+                        this.user = response.data;
+                        console.log(this.user[0].userId.length);
+                        if (this.user[0].userId.length > 0) {
+                            this.$router.push({name: 'accueil', params: {idUser: this.user[0].userId}})
+                        }
+                    }, (error) => {
+                        console.log(error);
+                    });
             }
-
         }
     }
 
