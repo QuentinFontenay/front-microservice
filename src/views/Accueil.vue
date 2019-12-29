@@ -11,13 +11,12 @@
             </v-toolbar-items>
 
             <template v-if="$vuetify.breakpoint.smAndUp">
-                <v-btn @click="clickDisconnect" icon>
+                <v-btn v-if="isLoggedIn" @click="clickDisconnect" icon>
                     <v-icon>mdi-logout</v-icon>
                 </v-btn>
             </template>
         </v-toolbar>
         <v-container class="my-5">
-            <p>{{idUser}}</p>
             <v-layout row wrap>
                 <v-flex xs12 sm6 md4 lg3 v-for="equip in equipement" v-bind:key="equip._id">
                     <v-card hover class="mx-auto ma-6" max-width="300">
@@ -71,9 +70,11 @@
                 this.$router.push({ name: 'commande', params: { idProduit: id, idUser: this.idUser } })
             },
             clickHistorique () {
-                this.$router.push({ name: 'HistoriqueCommande', params: {idClient: this.idClient}})
+                this.$router.push({ name: 'HistoriqueCommande'})
             },
             clickDisconnect () {
+                this.$store.dispatch('logout');
+                localStorage.clear();
                 this.$router.push('/')
             }
         },
@@ -88,13 +89,18 @@
             this.axios.get('http://localhost:8080/client/?idUser=' + this.idUser
             )
                 .then((response) => {
-                    this.idClient = response.data[0]._id;
+                    localStorage.setItem('idClient', response.data[0]._id);
                 }, (error) => {
                     console.log(error);
                 });
         },
         created () {
             this.idUser = this.$route.params.idUser;
+        },
+        computed: {
+            isLoggedIn() {
+                return this.$store.getters.isLoggedIn;
+            }
         }
     }
 </script>

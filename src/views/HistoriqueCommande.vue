@@ -56,8 +56,7 @@
             url: ""
         }),
         mounted() {
-            console.log(API_COMMANDE + this.$route.params.idClient);
-            this.axios.get(API_COMMANDE + this.$route.params.idClient
+            this.axios.get(API_COMMANDE + localStorage.getItem('idClient')
             )
                 .then((response) => {
                     this.commande = response.data

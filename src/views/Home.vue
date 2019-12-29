@@ -3,9 +3,9 @@
         <v-row>
             <v-col :cols="12" lg="5" md="5" offset-lg="3" offset-md="3">
                 <h1 class="pb-5">Login</h1>
-                <v-form ref="form" lazy-validation v-model="valid">
+                <v-form ref="form" @submit.prevent="validate" lazy-validation v-model="valid">
                     <v-text-field
-                            v-model="form.firstName"
+                            v-model="firstName"
                             required
                             filled
                             rounded
@@ -13,7 +13,7 @@
                             :rules="firstNameRules"
                     ></v-text-field>
                     <v-text-field
-                            v-model="form.Password"
+                            v-model="Password"
                             rounded
                             required
                             filled
@@ -22,10 +22,10 @@
                             :rules="PasswordRules"
                     ></v-text-field>
                     <v-btn
+                            type="submit"
                             :disabled="!valid"
                             color="success"
                             class="mr-4"
-                            @click="validate"
                     >
                         Validate
                     </v-btn>
@@ -40,8 +40,8 @@
 </template>
 
 <script>
-    // @ is an alias to /src
-    var apiUrl='http://localhost:3000/users';
+
+    const API_LOGIN ='http://localhost:3000/users';
 
     export default {
         data() {
@@ -49,8 +49,7 @@
                 t: 0,
                 firstName: '',
                 firstNameRules: [
-                    v => !!v || 'Login is required',
-                    v => (v && v.length <= 10) || 'First Name must be less than 10 characters',
+                    v => !!v || 'Login is required'
                 ],
                 Password: '',
                 PasswordRules: [
@@ -59,9 +58,6 @@
                 user: [],
                 show: true,
                 valid: false,
-                form: {
-                    cookie: false,
-                }
             };
         },
         methods: {
@@ -69,22 +65,19 @@
                 this.$router.push('/inscription')
             },
 
-            validate(event) {
-                event.preventDefault();
-
-                if (this.$refs.form.validate()) {
-                 //   var context = this;
-                    console.log("esst");
-                }
-
-                apiUrl = apiUrl + '?login=' + this.form.firstName + '&password=' + this.form.Password;
+            validate() {
+                var apiUrl = API_LOGIN + '?login=' + this.firstName + '&password=' + this.Password;
                 this.axios.get(apiUrl
                 )
                     .then(response => {
                         this.user = response.data;
-                        console.log(this.user[0].userId.length);
-                        if (this.user[0].userId.length > 0) {
-                            this.$router.push({name: 'accueil', params: {idUser: this.user[0].userId}})
+                        if (response.status === 200) {
+                            this.$store.dispatch("login", {
+                                email: this.firstName,
+                                password: this.password
+                            }).then(() => {
+                                this.$router.push({name: 'accueil', params: {idUser: this.user[0].userId}})
+                            });
                         }
                     }, (error) => {
                         console.log(error);

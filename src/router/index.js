@@ -7,9 +7,11 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import HistoriqueCommande from "../views/HistoriqueCommande";
 import Commande from "../views/Commande";
+import vuex from 'vuex'
 
-Vue.use(VueAxios, axios)
-Vue.use(VueRouter)
+Vue.use(VueAxios, axios);
+Vue.use(VueRouter);
+Vue.use(vuex);
 
 const routes = [
   {
