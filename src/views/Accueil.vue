@@ -26,7 +26,7 @@
                             {{equip.name}} de {{equip.sport}}
                         </v-card-title>
                         <v-card-subtitle>
-                            {{equip.prix}}€ la journée
+                            {{equip.prix}}€/jour
                         </v-card-subtitle>
                         <v-card-actions>
                             <v-btn color="orange" @click="clickCommande(equip._id)">Réserver</v-btn>

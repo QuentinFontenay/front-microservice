@@ -47,7 +47,7 @@
                         Continue
                     </v-btn>
 
-                    <v-btn style="margin-top: 1%" text>Cancel</v-btn>
+                    <v-btn style="margin-top: 1%" @click="clickHome" text>Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
@@ -124,8 +124,6 @@
                         >
                             Retour
                         </v-btn>
-
-                        <v-btn text>Cancel</v-btn>
                     </div>
                 </v-stepper-content>
 
@@ -172,8 +170,6 @@
                     >
                         Retour
                     </v-btn>
-
-                    <v-btn text>Cancel</v-btn>
                 </v-stepper-content>
             </v-stepper-items>
         </v-stepper>
@@ -247,6 +243,9 @@
                 if (this.$refs.form.validate()) {
                     this.e1 = 2
                 }
+            },
+            clickHome() {
+                this.$router.push({name: 'accueil'})
             },
             postClient: function () {
                 var today = new Date()
