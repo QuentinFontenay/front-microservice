@@ -3,6 +3,7 @@
         <v-row>
             <v-col :cols="12" lg="5" md="5" offset-lg="3" offset-md="3">
                 <h1 class="pb-5">Login</h1>
+                <p v-if="errorLogin">Le login/mot de passe est incorrecte</p>
                 <v-form ref="form" @submit.prevent="validate" lazy-validation v-model="valid">
                     <v-text-field
                             v-model="firstName"
@@ -57,7 +58,8 @@
                 ],
                 user: [],
                 show: true,
-                valid: false,
+                valid: true,
+                errorLogin: false
             };
         },
         methods: {
@@ -76,8 +78,12 @@
                                 email: this.firstName,
                                 password: this.password
                             }).then(() => {
-                                this.$router.push({name: 'accueil', params: {idUser: this.user[0].userId}})
+                                localStorage.setItem('idUser', response.data[0].userId);
+                                this.$router.push({name: 'accueil'})
                             });
+                        }
+                        else {
+                            this.errorLogin = true
                         }
                     }, (error) => {
                         console.log(error);

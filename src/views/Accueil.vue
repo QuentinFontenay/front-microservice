@@ -61,13 +61,12 @@
             show: false,
             selection: 1,
             idClient: '',
-            idUser:'',
             id: 1
         }),
         methods: {
             clickCommande (id) {
                 console.log(id)
-                this.$router.push({ name: 'commande', params: { idProduit: id, idUser: this.idUser } })
+                this.$router.push({ name: 'commande', params: { idProduit: id } })
             },
             clickHistorique () {
                 this.$router.push({ name: 'HistoriqueCommande'})
@@ -86,16 +85,13 @@
                 }, (error) => {
                     console.log(error);
                 });
-            this.axios.get('http://localhost:8080/client/?idUser=' + this.idUser
+            this.axios.get('http://localhost:8080/client/?idUser=' + localStorage.getItem('idUser')
             )
                 .then((response) => {
                     localStorage.setItem('idClient', response.data[0]._id);
                 }, (error) => {
                     console.log(error);
                 });
-        },
-        created () {
-            this.idUser = this.$route.params.idUser;
         },
         computed: {
             isLoggedIn() {

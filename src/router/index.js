@@ -35,7 +35,7 @@ const routes = [
     component: Accueil
   },
   {
-    path: '/commande/:idProduit/:idUser',
+    path: '/commande/:idProduit',
     props: true,
     name: 'commande',
     component: Commande

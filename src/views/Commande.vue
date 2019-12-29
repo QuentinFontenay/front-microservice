@@ -236,7 +236,6 @@
                     'Item 4',
                 ],
                 checkbox: false,
-                idUser: '',
             }
         },
         created: function () {
@@ -262,7 +261,7 @@
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: this.$route.params.idUser
+                        idUser: localStorage.getItem('IdUser')
                     })
                 }
                 else {
@@ -287,17 +286,16 @@
                     .then(response => (this.records = response.data))
             },
             recupClient() {
-                console.log(this.$route.params.idUser);
-                this.axios.get(API_CLIENT2 + this.$route.params.idUser
+                this.axios.get(API_CLIENT2 + localStorage.getItem('idUser')
                 )
                     .then(
                         response => {
-                            this.client = response.data
+                            this.client = response.data;
                             if (this.client.length !== 0) {
-                                this.name = this.client[0].name
-                                this.email = this.client[0].email
-                                this.telephone = this.client[0].telephone
-                                this.adresse = this.client[0].adresse
+                                this.name = this.client[0].name;
+                                this.email = this.client[0].email;
+                                this.telephone = this.client[0].telephone;
+                                this.adresse = this.client[0].adresse;
                             }
                         }, (error) => {
                             console.log(error);
