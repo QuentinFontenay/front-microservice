@@ -148,8 +148,8 @@
                                     <tr>
                                         <td>{{ records.name}}</td>
                                         <td>{{ records.sport }}</td>
-                                        <td>1</td>
-                                        <td>{{ records.prix}}€</td>
+                                        <td>{{ maCommande.nbJour }}</td>
+                                        <td>{{ getTotal() }}€</td>
                                     </tr>
                                     </tbody>
                                 </template>
@@ -225,18 +225,13 @@
                     v => !!v || 'Un télèphone est requis'
                 ],
                 select: null,
-                items: [
-                    'Item 1',
-                    'Item 2',
-                    'Item 3',
-                    'Item 4',
-                ],
-                checkbox: false,
+                maCommande: {}
             }
         },
         created: function () {
             this.recupEquipement();
             this.recupClient();
+            this.maCommande = this.$route.params.maCommande;
         },
         methods: {
             clickForm() {
@@ -247,8 +242,11 @@
             clickHome() {
                 this.$router.push({name: 'accueil'})
             },
+            getTotal() {
+                return this.maCommande.fraisService + (this.maCommande.nbJour * this.records.prix)
+            },
             postClient: function () {
-                var today = new Date()
+                var today = new Date();
                 var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var dateTime = date+' '+time;
@@ -269,15 +267,18 @@
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: this.$route.params.idUser
-                    })
+                        idUser: localStorage.getItem('IdUser')
+                    });
                     this.client = this.recupClient()
                 }
                 this.axios.post(API_COMMANDE, {
                     dateCommande: dateTime,
                     idClient: this.client[0]._id,
-                    idEquipement: this.$route.params.idProduit
-                })
+                    idEquipement: this.$route.params.idProduit,
+                    nbJourReserver: this.maCommande.nbJour,
+                    prixCommande: this.getTotal()
+
+                });
                 this.$router.push({ name: 'accueil'})
             },
             recupEquipement() {

@@ -38,10 +38,6 @@
             clickDetailProduct(id) {
                 this.$router.push({ name: 'detailProduct', params: { idProduit: id } })
             },
-            clickCommande (id) {
-                console.log(id)
-                this.$router.push({ name: 'commande', params: { idProduit: id } })
-            },
         },
         mounted() {
             this.axios.get('http://localhost:8080/equipement/'

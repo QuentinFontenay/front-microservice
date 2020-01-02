@@ -9,10 +9,12 @@ import HistoriqueCommande from "../views/HistoriqueCommande";
 import Commande from "../views/Commande";
 import vuex from 'vuex'
 import DetailProduct from "../views/DetailProduct";
+import moment from "vue-moment"
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.use(vuex);
+Vue.use(moment);
 
 const routes = [
   {
