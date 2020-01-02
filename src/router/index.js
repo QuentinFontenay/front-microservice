@@ -8,6 +8,7 @@ import VueAxios from 'vue-axios'
 import HistoriqueCommande from "../views/HistoriqueCommande";
 import Commande from "../views/Commande";
 import vuex from 'vuex'
+import DetailProduct from "../views/DetailProduct";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -39,8 +40,14 @@ const routes = [
     props: true,
     name: 'commande',
     component: Commande
-  }
-]
+  },
+  {
+    path: '/detail/:idProduit',
+    props: true,
+    name: 'detailProduct',
+    component: DetailProduct
+  },
+];
 
 const router = new VueRouter({
   routes

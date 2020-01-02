@@ -1,23 +1,6 @@
 <template>
     <div>
-        <v-toolbar dark>
-            <v-toolbar-title>
-                <router-link to="/accueil" class="toolbar-title">LOCASPORT</router-link>
-            </v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-toolbar-items>
-                <v-btn text>Mes Informations</v-btn>
-                <v-btn text>Mes Commandes</v-btn>
-            </v-toolbar-items>
-
-            <template v-if="$vuetify.breakpoint.smAndUp">
-                <v-btn icon>
-                    <v-icon>mdi-logout</v-icon>
-                </v-btn>
-            </template>
-        </v-toolbar>
+        <NavBar></NavBar>
         <v-content>
             <v-container>
                 <v-simple-table>
@@ -44,10 +27,12 @@
 </template>
 
 <script>
+    import NavBar from "../components/NavBar";
     const API_COMMANDE = "http://localhost:8080/commande/?idClient=";
     const API_EQUIPEMENT = "http://localhost:8080/equipement/";
     export default {
         name: "GestionCompte",
+        components: {NavBar},
         data: () => ({
             item: 0,
             commande: [],
@@ -79,8 +64,4 @@
 </script>
 
 <style scoped>
-    .toolbar-title {
-        color: white;
-        text-decoration: none;
-    }
 </style>
