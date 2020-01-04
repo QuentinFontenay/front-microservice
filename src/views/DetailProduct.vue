@@ -53,10 +53,10 @@
                                             v-on="on"
                                     ></v-text-field>
                                 </template>
-                                <v-date-picker v-model="maCommande.dateDebut" @input="menu1 = false"></v-date-picker>
+                                <v-date-picker locale="fr-fr" v-model="maCommande.dateDebut" @input="menu1 = false"></v-date-picker>
                             </v-menu>
                         </v-card-text>
-                        <v-icon>mdi-arrow-down</v-icon>
+                        <v-icon class="iconFleche">mdi-arrow-down</v-icon>
                         <v-card-text>
                             <v-menu
                                     v-model="menu2"
@@ -75,7 +75,12 @@
                                             v-on="on"
                                     ></v-text-field>
                                 </template>
-                                <v-date-picker v-model="maCommande.dateFin" @input="menu2 = false"></v-date-picker>
+                                <div v-if="maCommande.dateDebut === null">
+                                    <span>Veuillez d'abord selectionner une date de début</span>
+                                </div>
+                                <div v-else>
+                                    <v-date-picker :min="getDateMin(maCommande.dateDebut)" locale="fr-fr" v-model="maCommande.dateFin" @input="menu2 = false"></v-date-picker>
+                                </div>
                             </v-menu>
                         </v-card-text>
                         <v-divider class="mx-4"></v-divider>
@@ -144,6 +149,10 @@
             getTotal() {
                 return this.maCommande.fraisService + (this.maCommande.nbJour * this.records.prix)
             },
+            getDateMin(dateDebut) {
+                let date = this.$moment(dateDebut);
+                return date.add(1, 'days').format('YYYY-MM-DD')
+            },
             clickCommande () {
                 if (this.maCommande.dateDebut === null || this.maCommande.dateFin === null) {
                     alert("Selectionnez les dates de début et de fin de location")
@@ -164,5 +173,8 @@
     .rounded-image {
         border-image: 50% !important;
         border-color: brown !important;
+    }
+    .iconFleche {
+        margin-left: 44%;
     }
 </style>

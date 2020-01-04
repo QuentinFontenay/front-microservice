@@ -224,6 +224,8 @@
                 telRules: [
                     v => !!v || 'Un télèphone est requis'
                 ],
+                idUser: "",
+                idClient: "",
                 select: null,
                 maCommande: {}
             }
@@ -232,6 +234,7 @@
             this.recupEquipement();
             this.recupClient();
             this.maCommande = this.$route.params.maCommande;
+            this.idUser = localStorage.getItem("idUser");
         },
         methods: {
             clickForm() {
@@ -250,35 +253,44 @@
                 var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var dateTime = date+' '+time;
-
-                if (this.client != null) {
+                if (this.client[0] !== undefined) {
 
                     this.axios.put(API_CLIENT + this.client[0]._id, {
                         name: this.name,
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: localStorage.getItem('IdUser')
-                    })
+                        idUser: this.idUser
+                    });
+                    this.axios.post(API_COMMANDE, {
+                        dateCommande: dateTime,
+                        idClient: this.client[0]._id,
+                        idEquipement: this.$route.params.idProduit,
+                        nbJourReserver: this.maCommande.nbJour,
+                        prixCommande: this.getTotal()
+
+                    });
                 }
                 else {
+                    this.idClient = this.mongoObjectID();
+                    localStorage.setItem('idClient', this.idClient);
                     this.axios.post(API_CLIENT, {
+                        _id: this.idClient,
                         name: this.name,
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: localStorage.getItem('IdUser')
+                        idUser: this.idUser
                     });
-                    this.client = this.recupClient()
-                }
-                this.axios.post(API_COMMANDE, {
-                    dateCommande: dateTime,
-                    idClient: this.client[0]._id,
-                    idEquipement: this.$route.params.idProduit,
-                    nbJourReserver: this.maCommande.nbJour,
-                    prixCommande: this.getTotal()
+                    this.axios.post(API_COMMANDE, {
+                        dateCommande: dateTime,
+                        idClient: this.idClient,
+                        idEquipement: this.$route.params.idProduit,
+                        nbJourReserver: this.maCommande.nbJour,
+                        prixCommande: this.getTotal()
 
-                });
+                    });
+                }
                 this.$router.push({ name: 'accueil'})
             },
             recupEquipement() {
@@ -301,6 +313,12 @@
                             console.log(error);
                         });
             },
+            mongoObjectID() {
+                var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+                return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+                    return (Math.random() * 16 | 0).toString(16);
+                }).toLowerCase();
+            }
         },
     }
 </script>

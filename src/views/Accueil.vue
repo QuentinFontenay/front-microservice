@@ -4,15 +4,18 @@
         <v-container class="my-5">
             <v-layout row wrap>
                 <v-flex xs12 sm6 md4 lg3 v-for="equip in equipement" v-bind:key="equip._id">
-                    <v-card @click="clickDetailProduct(equip._id)" hover class="mx-auto ma-6" max-width="300">
-                        <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"></v-img>
+                    <v-card @click="clickDetailProduct(equip._id)" hover class="mx-auto ma-6">
+                        <v-img class="white--text align-end" aspect-ratio="1" max-height="200" contain :src="getImgUrl(equip.image)"></v-img>
 
-                        <v-card-title>
-                            {{equip.name}} de {{equip.sport}}
+                        <v-card-title class="equipName">
+                            {{equip.name}}
                         </v-card-title>
                         <v-card-subtitle>
-                            {{equip.prix}}€/jour
+                            {{equip.sport}}
                         </v-card-subtitle>
+                        <v-card-title>
+                            {{equip.prix}}€/jour
+                        </v-card-title>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -38,6 +41,9 @@
             clickDetailProduct(id) {
                 this.$router.push({ name: 'detailProduct', params: { idProduit: id } })
             },
+            getImgUrl(iconName) {
+                return iconName ? require(`../assets/${iconName}`) : ''
+            },
         },
         mounted() {
             this.axios.get('http://localhost:8080/equipement/'
@@ -59,13 +65,7 @@
 </script>
 
 <style scoped>
-    #cardSwag {
-        font-family: 'Open Sans', sans-serif;
-
-        margin-left: 20px;
-        margin-right: 20px;
-
-        display: flex;
-        flex-direction: row;
+    .equipName {
+        font-size: 14px;
     }
 </style>
