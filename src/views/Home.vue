@@ -3,11 +3,12 @@
         <v-row>
             <v-col :cols="12" lg="5" md="5" offset-lg="3" offset-md="3">
                 <h1 class="pb-5">Login</h1>
-                <v-alert v-if="errorLogin" type="error">
-                    Le login ou le mot de passe est incorrect
+                <v-alert v-if="errorLogin" class="error" type="error">
+                    {{erreurMessage}}
                 </v-alert>
                 <v-form ref="form" @submit.prevent="validate" lazy-validation v-model="valid">
                     <v-text-field
+                            class="login-input"
                             v-model="firstName"
                             required
                             filled
@@ -16,6 +17,7 @@
                             :rules="firstNameRules"
                     ></v-text-field>
                     <v-text-field
+                            class="password-input"
                             v-model="Password"
                             rounded
                             required
@@ -28,7 +30,7 @@
                             type="submit"
                             :disabled="!valid"
                             color="success"
-                            class="mr-4"
+                            class="mr-4 tefr"
                     >
                         Validate
                     </v-btn>
@@ -49,7 +51,7 @@
     export default {
         data() {
             return {
-                t: 0,
+                erreurMessage: 'Le login ou le mot de passe est incorrect',
                 firstName: '',
                 firstNameRules: [
                     v => !!v || 'Login is required'
