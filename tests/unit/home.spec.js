@@ -4,6 +4,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router'
 import Accueil from "../../src/views/Accueil";
 
+//const MockAdapter = require("axios-mock-adapter");
+
 describe('Accueil.vue', () => {
   let wrapper;
   beforeEach(()=>{
@@ -11,7 +13,4 @@ describe('Accueil.vue', () => {
     Vue.use(VueRouter);
     wrapper = shallowMount(Accueil);
   });
-  it("renders many children", () => {
-    expect(wrapper.findAll(Child).length).toBe(3)
-  })
 });

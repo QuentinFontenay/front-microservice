@@ -53,6 +53,7 @@
                                 });
                                 this.equipement.push(response.data)
                             }, (error) => {
+                                this.TrackJS.track('Testing TrackJS!');
                                 console.log(error);
                             });
                     }
