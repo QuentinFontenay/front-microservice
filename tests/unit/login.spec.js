@@ -1,6 +1,3 @@
-jest.mock('axios', () => ({
-    get: jest.fn()
-}));
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import Home from "../../src/views/Home";
 import vuetify from "vuetify"
@@ -50,16 +47,4 @@ describe('Home.vue', () => {
     it('renders a vue instance', () => {
         expect(shallowMount(Home).isVueInstance()).toBe(true);
     });
-    it("authenticated a user", async () => {
-        const commit = jest.fn();
-        const username = "alice"
-        const password = "password"
-
-        await actions.authenticate({ commit }, { username, password })
-
-        expect(url).toBe("/api/authenticate")
-        expect(body).toEqual({ username, password })
-        expect(commit).toHaveBeenCalledWith(
-            "SET_AUTHENTICATED", true)
-    })
 });

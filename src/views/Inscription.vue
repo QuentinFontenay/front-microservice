@@ -26,7 +26,6 @@
                     ></v-text-field>
                     <v-text-field
                             class="password-input"
-                            id="mdp_check"
                             v-model="mdp_check"
                             rounded
                             required
@@ -90,8 +89,7 @@
         },
         methods: {
             validInscription(event) {
-                event.preventDefault()
-                //var confirm_password = document.getElementById("mdp_check");
+                event.preventDefault();
                 if (this.mdp !== this.mdp_check){
                     this.errorInscription = true;
                 }
