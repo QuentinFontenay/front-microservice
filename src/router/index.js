@@ -5,11 +5,16 @@ import Accueil from "../views/Accueil.vue";
 import Inscription from "../views/Inscription";
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import GestionCompte from "../views/GestionCompte";
+import HistoriqueCommande from "../views/HistoriqueCommande";
 import Commande from "../views/Commande";
+import vuex from 'vuex'
+import DetailProduct from "../views/DetailProduct";
+import moment from "vue-moment"
 
-Vue.use(VueAxios, axios)
-Vue.use(VueRouter)
+Vue.use(VueAxios, axios);
+Vue.use(VueRouter);
+Vue.use(vuex);
+Vue.use(moment);
 
 const routes = [
   {
@@ -23,9 +28,9 @@ const routes = [
     component: Inscription
   },
   {
-    path: '/account_gestion',
-    name: 'GestionCompte',
-    component: GestionCompte
+    path: '/historique_commande',
+    name: 'HistoriqueCommande',
+    component: HistoriqueCommande
   },
   {
     path: '/accueil',
@@ -33,12 +38,18 @@ const routes = [
     component: Accueil
   },
   {
-    path: '/commande/:idProduit/:idUser',
+    path: '/commande/:idProduit',
     props: true,
     name: 'commande',
     component: Commande
-  }
-]
+  },
+  {
+    path: '/detail/:idProduit',
+    props: true,
+    name: 'detailProduct',
+    component: DetailProduct
+  },
+];
 
 const router = new VueRouter({
   routes

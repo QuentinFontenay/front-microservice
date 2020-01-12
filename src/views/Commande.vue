@@ -47,7 +47,7 @@
                         Continue
                     </v-btn>
 
-                    <v-btn style="margin-top: 1%" text>Cancel</v-btn>
+                    <v-btn style="margin-top: 1%" @click="clickHome" text>Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
@@ -124,8 +124,6 @@
                         >
                             Retour
                         </v-btn>
-
-                        <v-btn text>Cancel</v-btn>
                     </div>
                 </v-stepper-content>
 
@@ -150,8 +148,8 @@
                                     <tr>
                                         <td>{{ records.name}}</td>
                                         <td>{{ records.sport }}</td>
-                                        <td>1</td>
-                                        <td>{{ records.prix}}€</td>
+                                        <td>{{ maCommande.nbJour }}</td>
+                                        <td>{{ getTotal() }}€</td>
                                     </tr>
                                     </tbody>
                                 </template>
@@ -172,8 +170,6 @@
                     >
                         Retour
                     </v-btn>
-
-                    <v-btn text>Cancel</v-btn>
                 </v-stepper-content>
             </v-stepper-items>
         </v-stepper>
@@ -228,19 +224,17 @@
                 telRules: [
                     v => !!v || 'Un télèphone est requis'
                 ],
+                idUser: "",
+                idClient: "",
                 select: null,
-                items: [
-                    'Item 1',
-                    'Item 2',
-                    'Item 3',
-                    'Item 4',
-                ],
-                checkbox: false,
+                maCommande: {}
             }
         },
         created: function () {
-            this.recupEquipement()
-            this.recupClient()
+            this.recupEquipement();
+            this.recupClient();
+            this.maCommande = this.$route.params.maCommande;
+            this.idUser = localStorage.getItem("idUser");
         },
         methods: {
             clickForm() {
@@ -248,37 +242,55 @@
                     this.e1 = 2
                 }
             },
+            clickHome() {
+                this.$router.push({name: 'accueil'})
+            },
+            getTotal() {
+                return this.maCommande.fraisService + (this.maCommande.nbJour * this.records.prix)
+            },
             postClient: function () {
-                var today = new Date()
+                var today = new Date();
                 var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var dateTime = date+' '+time;
-
-                if (this.client != null) {
+                if (this.client[0] !== undefined) {
 
                     this.axios.put(API_CLIENT + this.client[0]._id, {
                         name: this.name,
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: this.$route.params.idUser
-                    })
+                        idUser: this.idUser
+                    });
+                    this.axios.post(API_COMMANDE, {
+                        dateCommande: dateTime,
+                        idClient: this.client[0]._id,
+                        idEquipement: this.$route.params.idProduit,
+                        nbJourReserver: this.maCommande.nbJour,
+                        prixCommande: this.getTotal()
+
+                    });
                 }
                 else {
+                    this.idClient = this.mongoObjectID();
+                    localStorage.setItem('idClient', this.idClient);
                     this.axios.post(API_CLIENT, {
+                        _id: this.idClient,
                         name: this.name,
                         email: this.email,
                         adresse: this.adresse,
                         telephone: this.telephone,
-                        idUser: this.$route.params.idUser
-                    })
-                    this.client = this.recupClient()
+                        idUser: this.idUser
+                    });
+                    this.axios.post(API_COMMANDE, {
+                        dateCommande: dateTime,
+                        idClient: this.idClient,
+                        idEquipement: this.$route.params.idProduit,
+                        nbJourReserver: this.maCommande.nbJour,
+                        prixCommande: this.getTotal()
+
+                    });
                 }
-                this.axios.post(API_COMMANDE, {
-                    dateCommande: dateTime,
-                    idClient: this.client[0]._id,
-                    idEquipement: this.$route.params.idProduit
-                })
                 this.$router.push({ name: 'accueil'})
             },
             recupEquipement() {
@@ -286,21 +298,27 @@
                     .then(response => (this.records = response.data))
             },
             recupClient() {
-                this.axios.get(API_CLIENT2 + this.$route.params.idUser
+                this.axios.get(API_CLIENT2 + localStorage.getItem('idUser')
                 )
                     .then(
                         response => {
-                            this.client = response.data
+                            this.client = response.data;
                             if (this.client.length !== 0) {
-                                this.name = this.client[0].name
-                                this.email = this.client[0].email
-                                this.telephone = this.client[0].telephone
-                                this.adresse = this.client[0].adresse
+                                this.name = this.client[0].name;
+                                this.email = this.client[0].email;
+                                this.telephone = this.client[0].telephone;
+                                this.adresse = this.client[0].adresse;
                             }
                         }, (error) => {
                             console.log(error);
                         });
             },
+            mongoObjectID() {
+                var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+                return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+                    return (Math.random() * 16 | 0).toString(16);
+                }).toLowerCase();
+            }
         },
     }
 </script>

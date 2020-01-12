@@ -3,9 +3,13 @@
         <v-row>
             <v-col :cols="12" lg="5" md="5" offset-lg="3" offset-md="3">
                 <h1 class="pb-5">Login</h1>
-                <v-form ref="form" lazy-validation v-model="valid">
+                <v-alert v-if="errorLogin" class="error" type="error">
+                    {{erreurMessage}}
+                </v-alert>
+                <v-form ref="form" @submit.prevent="validate" lazy-validation v-model="valid">
                     <v-text-field
-                            v-model="form.firstName"
+                            class="login-input"
+                            v-model="firstName"
                             required
                             filled
                             rounded
@@ -13,7 +17,8 @@
                             :rules="firstNameRules"
                     ></v-text-field>
                     <v-text-field
-                            v-model="form.Password"
+                            class="password-input"
+                            v-model="Password"
                             rounded
                             required
                             filled
@@ -22,10 +27,10 @@
                             :rules="PasswordRules"
                     ></v-text-field>
                     <v-btn
+                            type="submit"
                             :disabled="!valid"
                             color="success"
-                            class="mr-4"
-                            @click="validate"
+                            class="mr-4 tefr"
                     >
                         Validate
                     </v-btn>
@@ -33,7 +38,6 @@
               <br>
                 <div class="home">
                     <v-btn color="success" class="mr-4" @click="clickInscription">Inscription</v-btn>
-                    <v-btn color="success" class="mr-4" @click="clickAccueil">Accueil</v-btn>
                 </div>
             </v-col>
         </v-row>
@@ -41,27 +45,25 @@
 </template>
 
 <script>
-    // @ is an alias to /src
-    var apiUrl='http://localhost:3000/users/connexion';
+
+    const API_LOGIN ='http://localhost:3000/users';
 
     export default {
         data() {
             return {
+                erreurMessage: 'Le login ou le mot de passe est incorrect',
                 firstName: '',
                 firstNameRules: [
-                    v => !!v || 'Login is required',
-                    v => (v && v.length <= 10) || 'First Name must be less than 10 characters',
+                    v => !!v || 'Login is required'
                 ],
                 Password: '',
                 PasswordRules: [
                     v => !!v || 'Password is required'
                 ],
-
+                user: [],
                 show: true,
                 valid: true,
-                form: {
-                    cookie: false,
-                }
+                errorLogin: false
             };
         },
         methods: {
@@ -69,42 +71,28 @@
                 this.$router.push('/inscription')
             },
 
-            validate(event) {
-                var con = false;
-
-
-                event.preventDefault()
-                if (this.$refs.form.validate()) {
-                    this.snackbar = true
-                    //var context = this
-                    console.log(this.form.firstName)
-                    console.log(this.form.Password)
-                }
-
-                apiUrl = apiUrl + '/' + this.form.firstName + '/' + this.form.Password;
-                //var jsonContent = JSON.stringify({"login": this.form.firstName, "password": this.form.Password});
-                /*const Http = new XMLHttpRequest();
-                console.log(apiUrl);
-                Http.open("GET", apiUrl);
-                Http.setRequestHeader("Content-Type", "application/json");
-                //Http.responseType = 'json';
-                Http.send(null);
-                console.log(Http.status);
-                console.log(Http.response);
-                if(Http.readyState==0){
-                    console.log('fuck')
-                }
-                if(Http.readyState==4){
-                    console.log("Requête terminé");
-                }*/
-                this.axios.get(apiUrl).then(response =>(console.log(response.data)));
-                if (con == true){
-                    this.$router.push('/accueil')
-                }
-
-
+            validate() {
+                var apiUrl = API_LOGIN + '?login=' + this.firstName + '&password=' + this.Password;
+                this.axios.get(apiUrl
+                )
+                    .then(response => {
+                        this.user = response.data;
+                        if (response.status === 200) {
+                            this.$store.dispatch("login", {
+                                email: this.firstName,
+                                password: this.password
+                            }).then(() => {
+                                localStorage.setItem('idUser', response.data[0].userId);
+                                this.$router.push({name: 'accueil'})
+                            });
+                        }
+                        else {
+                            this.errorLogin = true
+                        }
+                    }, (error) => {
+                        console.log(error);
+                    });
             }
-
         }
     }
 
