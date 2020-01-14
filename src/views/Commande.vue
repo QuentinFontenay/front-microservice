@@ -51,65 +51,12 @@
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
-                    <v-card>
-
-                        <v-card-title
-                                class="blue darken-1 white--text font-weight-black title"
-                        >
-                            DETAILS<br>
-                            PAIEMENT
-                            <v-spacer></v-spacer>
-
-                            <v-img
-                                    aspect-ratio="3.075" max-height="40" :src="URL_IMAGE" position="right" contain
-                            />
-                        </v-card-title>
-
-                        <v-card-text class='pb-10'>
-                            <v-row>
-                                <v-col cols='6'>
-                                    <v-subheader class="grey--text text--lighten-1 pl-0 subheader">TITULAIRE DE LA CARTE
-                                    </v-subheader>
-                                    <v-text-field
-                                            single-line outlined label="Johny Relative" hide-details
-                                    />
-                                </v-col>
-
-                                <v-col cols='6'>
-                                    <v-subheader class="grey--text text--lighten-1 pl-0 subheader">NUMERO DE CARTE
-                                    </v-subheader>
-                                    <v-text-field
-                                            single-line outlined mask="credit-card" v-model="valueOfCardNumber"
-                                            hide-details
-                                    />
-                                </v-col>
-
-                                <v-col col='4'>
-                                    <v-subheader class="grey--text text--lighten-1 pl-0 subheader">DATE D'EXPIRATION
-                                    </v-subheader>
-                                    <v-select
-                                            :items="MonthList" label="Mois" outlined
-                                            append-icon='mdi-chevron-down' hide-details
-                                    />
-                                </v-col>
-
-                                <v-col col='4'>
-                                    <v-subheader class="grey--text text--lighten-1 pl-0 subheader"></v-subheader>
-                                    <v-select
-                                            :items="YearList" label="Année" outlined
-                                            append-icon='mdi-chevron-down' hide-details
-                                    />
-                                </v-col>
-
-                                <v-col col='4'>
-                                    <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CVV</v-subheader>
-                                    <v-text-field single-line outlined hide-details/>
-                                </v-col>
-
-                            </v-row>
-                        </v-card-text>
-
-                    </v-card>
+                    <form action="/accueil" method="POST">
+                        <stripe-checkout
+                                stripe-key="pk_test_kNAa9WFbLOnR0UfUAZIyyjLN00yVu6a2Lt"
+                                product="product">
+                        </stripe-checkout>
+                    </form>
                     <div class="group-bouton">
                         <v-btn
                                 color="primary"
@@ -183,11 +130,21 @@
     const API_CLIENT2 = 'http://localhost:8080/client/?idUser=';
     const API_COMMANDE = 'http://localhost:8080/commande/';
 
+    import { StripeCheckout } from 'vue-stripe'
+
     export default {
         name: "Commande",
+        components: {
+            'stripe-checkout': StripeCheckout
+        },
         data () {
             return {
                 URL_IMAGE: URL_IMAGE,
+                product: {
+                    name: 'Moby Dick',
+                    description: 'I love whales',
+                    amount: 100000
+                },
                 YearList: ['2019', '2020', '2021', '2022', '2023', '2024', '2025'],
                 valueOfCardNumber: '0000-0000-0000-0000',
                 MonthList: [
