@@ -7,7 +7,6 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-            <v-btn text>Mes Informations</v-btn>
             <v-btn  @click="clickHistorique" text>Mes Commandes</v-btn>
         </v-toolbar-items>
 
