@@ -1,9 +1,8 @@
-import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
+import  { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import Home from "../../src/views/Home";
 import vuetify from "vuetify"
 import Vue from 'vue';
 import VueRouter from 'vue-router'
-import axios from 'axios'
 
 describe('Home.vue', () => {
     let wrapper;
